@@ -1,41 +1,43 @@
 import {useState} from "react";
-import Note from "./components/Notes";
+import Note from "./components/Notes.jsx";
 
 
-const App = (props) => {
-    const[notes, setNotes] = useState(props.notes)
-    const[newNote, setNewNote] = useState('..')
-    const[showAll, setShowAll] = useState(true)
+const App = () => {
+    const [persons, setPersons] = useState([{name: 'Jagdish Chandra singh rawat'}]);
+    const [newName, setNewName] = useState('');
 
-    const addNote = (event) => {
+    const handleNewNameChange = (event)=> {
+        console.log("handleNewNameClick", event.target.value);
+        setNewName(event.target.value);
+    }
+
+    const addPhoneDetails = (event) => {
+        console.log("addPhoneDetails: ", {name: newName})
         event.preventDefault()
-        const noteObject = {
-            content: newNote,
-            important: Math.random() < 0.5,
-            id: notes.length + 1,
+        if(newName.trim() !== ''){
+            setPersons([...persons, { name: newName }]);
+            setNewName('')
         }
-        setNotes(notes.concat(noteObject))
-        setNewNote('')
-    }
-    const handleNoteChange = (event) => {
-        console.log('button clicked', event.target.value)
-        setNewNote(event.target.value)
-    }
-    const notesToShow = showAll ? notes : notes.filter((note)=> note.important === true)
 
+    }
     return (
         <div>
-            <h1>Notes</h1>
-            <button onClick={()=> setShowAll(!showAll)}>
-               show { showAll ? 'important': 'all'}
-            </button>
-            <ul>
-                {notesToShow.map(note => <Note key={note.id} note={note}/>)}
-            </ul>
-            <form onSubmit={addNote}>
-                <input value={newNote} onChange={handleNoteChange}/>
-                <button type="submit">Add Note</button>
+            <h2>phonebook</h2>
+            <form onSubmit={addPhoneDetails}>
+                <div>
+                    name: <input value={newName} onChange={handleNewNameChange} />
+                </div>
+                <div>
+                    <button type='submit'>add</button>
+                </div>
             </form>
+            <h2>Numbers</h2>
+            <div className="persons">
+                <ul>
+                    {persons.map((person, index) => <Note key={index + 1} note={{content: person.name}} />)}
+                </ul>
+            </div>
+
         </div>
     )
 
