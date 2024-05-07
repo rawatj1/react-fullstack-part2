@@ -4,9 +4,15 @@ import Note from "./components/Notes.jsx";
 
 
 const App = () => {
-    const [persons, setPersons] = useState([{name: 'Jagdish Rawat', phoneNo: '008867542884'}]);
-    const [newName, setNewName] = useState('');
+    const [persons, setPersons] = useState([
+        { name: 'Arto Hellas', number: '040-123456', id: 1 },
+        { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+        { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+        { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+    ]);
+    const[newName, setNewName] = useState('');
     const[newPhoneNo, setNewPhoneNo] = useState('');
+    const[filteredPersons, setFilteredPersons] = useState(persons);
 
     const handleNewNameChange = (event)=> {
         console.log("handleNewNameClick", event.target.value);
@@ -18,16 +24,29 @@ const App = () => {
         setNewPhoneNo(event.target.value)
     }
 
+    const handleFilterChange = (event) => {
+        console.log("handleFilterChange", event.target.value);
+        const filterValue = event.target.value;
+        if (filterValue === '') {
+            setFilteredPersons(persons)
+        }else {
+            const filterPersons = persons.filter((person) => person.name.toLocaleLowerCase().includes(filterValue.toLocaleLowerCase()));
+            setFilteredPersons(filterPersons)
+        }
+    }
+
     const addPhoneDetails = (event) => {
         event.preventDefault()
-        const addedPerson= {name: newName, phoneNo: newPhoneNo}
+        const addedPerson= {name: newName, number: newPhoneNo, id: persons.length + 1}
         console.log("addPhoneDetails: ", {addedPerson})
         const existingPerson = persons.find((person) => JSON.stringify(person) === JSON.stringify(addedPerson))
         if(existingPerson){
             alert(`${newName} is already added to phonebook`)
             return;
         }
-        setPersons([...persons, addedPerson]);
+        const newPersons = [...persons, addedPerson]
+        setPersons(newPersons);
+        setFilteredPersons(newPersons);
         setNewName('')
         setNewPhoneNo('')
     }
@@ -35,7 +54,11 @@ const App = () => {
     return (
         <div>
             <h2>phonebook</h2>
+            <div>
+                Filter Shown with:  <input onChange={handleFilterChange}/>
+            </div>
             <form onSubmit={addPhoneDetails}>
+                <h2>add a new</h2>
                 <div>
                     name: <input value={newName} onChange={handleNewNameChange}/>
                 </div>
@@ -49,7 +72,7 @@ const App = () => {
             <h2>Numbers</h2>
             <div className="persons">
                 <ul>
-                    {persons.map((person, index) => <Note key={index + 1} note={{content: `${person.name} - ${person.phoneNo}`}} />)}
+                    {filteredPersons.map((person, index) => <Note key={person.id} note={{content: `${person.name} - ${person.number}`}} />)}
                 </ul>
             </div>
 
