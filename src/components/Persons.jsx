@@ -1,4 +1,4 @@
-import Note from "./Notes.jsx";
+import Note from "./Phones.jsx";
 const Persons = ({persons}) => {
     return (
         <div className="persons">
