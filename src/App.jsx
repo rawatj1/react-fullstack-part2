@@ -39,20 +39,28 @@ const App = () => {
 
     const addPhoneDetails = (event) => {
         event.preventDefault()
-        const addedPerson= {name: newName, number: newPhoneNo, id: persons.length + 1}
-        console.log("addPhoneDetails: ", {addedPerson})
-        const existingPerson = persons.find((person) => JSON.stringify(person) === JSON.stringify(addedPerson))
-        if(existingPerson){
-            alert(`${newName} is already added to phonebook`)
-            return;
+        const addedPerson = {name: newName, number: newPhoneNo}
+        const existingPerson = persons.find(p => p.name.toLocaleLowerCase().trim() === newName.toLocaleLowerCase().trim())
+        console.log(`existingPerson: ${existingPerson}`)
+        if (existingPerson) {
+            if (window.confirm(`${existingPerson.name} is already present in the phonebook, replace the old number`)) {
+                phoneService
+                    .update(existingPerson.id, {name: existingPerson.name, number: newPhoneNo})
+                    .then(_ => {
+                        console.log("Updated user Number");
+                        phoneService.getAll().then((updatedPersons) => setPersons(updatedPersons))
+                    })
+                    .catch(err => console.log(err));
+            }
+        } else {
+            phoneService
+                .create(addedPerson)
+                .then(resData => {
+                    phoneService.getAll().then((updatedPersons) => setPersons(updatedPersons))
+                    setNewName('')
+                    setNewPhoneNo('')
+                })
         }
-        phoneService
-            .create(addedPerson)
-            .then(_ => {
-                setPersons(persons.concat(addedPerson))
-                setNewName('')
-                setNewPhoneNo('')
-            })
     }
 
     const handlePhoneDelete = (id, name) =>{
@@ -86,7 +94,7 @@ const App = () => {
             <h2>Numbers</h2>
             <div className="persons">
                 <ul>
-                    {persons.map((person, index) =>
+                    {persons.map((person) =>
                         <Phone key={person.id} phone={{content: `${person.name} - ${person.number}`}} handlePhoneDelete = {() => handlePhoneDelete(person.id, person.name)} />)}
                 </ul>
             </div>
