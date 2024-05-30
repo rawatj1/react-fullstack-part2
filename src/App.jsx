@@ -30,7 +30,7 @@ const App = () => {
             <Notification status='error' message={errorMessage} />
             <Filter persons={persons} setPersons={setPersons} />
             <PhoneForm persons={persons}  setPersons={setPersons} setInfoMessage={setInfoMessage} setErrorMessage={setErrorMessage}/>
-            <PhonePersonsList persons={persons} setPersons={setPersons} setInfoMessage={setInfoMessage} />
+            <PhonePersonsList persons={persons} setPersons={setPersons} setInfoMessage={setInfoMessage} setErrorMessage={setErrorMessage}/>
         </div>
     )
 

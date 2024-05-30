@@ -1,10 +1,14 @@
 import Phone from "./Phones.jsx";
 import phoneService from "../services/phone.js";
 
-const PhonePersonsList = ({persons, setPersons, setInfoMessage}) => {
+const PhonePersonsList = ({persons, setPersons, setInfoMessage, setErrorMessage}) => {
 
-    const clearInfoMessage = () =>{
+    const clearInfoMessage = () => {
         setInfoMessage('')
+    }
+
+    const clearErrorMessage = () => {
+        setErrorMessage('')
     }
 
     const handlePhoneDelete = (id, name) =>{
@@ -15,6 +19,11 @@ const PhonePersonsList = ({persons, setPersons, setInfoMessage}) => {
                     setInfoMessage(`${name} Deleted!`)
                     setTimeout(() => clearInfoMessage(), 2000)
                     setPersons(persons.filter((person) => person.id !== id))
+                })
+                .catch(error => {
+                    console.log(error)
+                    setTimeout(() => clearErrorMessage(), 2000)
+                    setErrorMessage(`Cannot delete error`)
                 })
         }
     }
