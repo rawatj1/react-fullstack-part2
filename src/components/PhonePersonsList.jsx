@@ -23,7 +23,12 @@ const PhonePersonsList = ({persons, setPersons, setInfoMessage, setErrorMessage}
                 .catch(error => {
                     console.log(error)
                     setTimeout(() => clearErrorMessage(), 2000)
-                    setErrorMessage(`Cannot delete error`)
+                    if(error.response.status === 404 ){
+                        setErrorMessage(`Information ${name} is already deleted from the server`)
+                    } else {
+                        setErrorMessage(`Error deleting ${name}: ${error.message}`)
+                    }
+
                 })
         }
     }
