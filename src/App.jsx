@@ -1,36 +1,37 @@
 import {useEffect, useState} from "react";
-import phoneService from "./services/phone.js";
-import Notification from "./components/Notifications.jsx";
-import PhoneForm from "./components/PhoneForm.jsx";
-import PhonePersonsList from "./components/PhonePersonsList.jsx";
-import Filter from "./components/Filter.jsx";
-import './index.css';
-
+import country from "./services/fetchCountries.js"
+import SearchBar from "./components/SearchBar.jsx";
+import CountryList from "./components/CountryList.jsx";
+import CountryDetails from "./components/CountryDetails.jsx";
 
 const App = () => {
-    const[persons, setPersons] = useState([]);
-    const[errorMessage, setErrorMessage] = useState('');
-    const[infoMessage, setInfoMessage] = useState('');
+    const [allCountries, setAllCountries] = useState([]);
+    const [filteredCountries, setFilteredCountries] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
 
     const hook = () => {
-        console.log('effect');
-        phoneService
+        country
             .getAll()
-            .then(initialPhoneData => {
-                console.log('promise fulfilled')
-                setPersons(initialPhoneData)
+            .then(res => {
+                const countryNames = res.map(country => country.name.common)
+                setAllCountries(countryNames)
             })
+            .catch(error => console.log(error));
     }
-    useEffect(hook, []);
 
+    useEffect(hook, []);
     return (
         <div>
-            <h2>Phonebook</h2>
-            <Notification status='info' message={infoMessage} />
-            <Notification status='error' message={errorMessage} />
-            <Filter persons={persons} setPersons={setPersons} />
-            <PhoneForm persons={persons}  setPersons={setPersons} setInfoMessage={setInfoMessage} setErrorMessage={setErrorMessage}/>
-            <PhonePersonsList persons={persons} setPersons={setPersons} setInfoMessage={setInfoMessage} setErrorMessage={setErrorMessage}/>
+            <SearchBar setSearchInput={setSearchInput} allCountries={allCountries} searchInput={searchInput}
+                       setFilteredCountries={setFilteredCountries}/>
+            {
+                filteredCountries.length === 1 ? (
+                    <CountryDetails name={filteredCountries[0]}/>
+                ) : filteredCountries.length <= 10 ? (
+                    <CountryList filteredCountries={filteredCountries}/>
+                ) : (<p>Please make your query more specific.</p>)
+            }
+
         </div>
     )
 
