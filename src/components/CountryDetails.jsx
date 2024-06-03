@@ -21,7 +21,7 @@ const CountryDetails = ({name}) => {
     }
     useEffect(hook, [name]);
 
-    if(!country){
+    if (!country) {
         return (<div>Loading...</div>)
     }
 
@@ -34,7 +34,7 @@ const CountryDetails = ({name}) => {
             <ul>
                 {country.languages.map(language => (<li key={language}>{language}</li>))}
             </ul>
-            <img src={country.flag} alt="flags" />
+            <img src={country.flag} alt="flags"/>
 
         </div>
     )

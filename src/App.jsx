@@ -28,7 +28,7 @@ const App = () => {
                 filteredCountries.length === 1 ? (
                     <CountryDetails name={filteredCountries[0]}/>
                 ) : filteredCountries.length <= 10 ? (
-                    <CountryList filteredCountries={filteredCountries}/>
+                    <CountryList filteredCountries={filteredCountries} setFilteredCountries={setFilteredCountries}/>
                 ) : (<p>Please make your query more specific.</p>)
             }
 

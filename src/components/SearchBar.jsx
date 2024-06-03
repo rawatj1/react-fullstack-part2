@@ -1,4 +1,4 @@
-const SearchBar = ({searchInput, allCountries, setSearchInput, setFilteredCountries}) => {
+const SearchBar = ({allCountries, setSearchInput, setFilteredCountries}) => {
     const handleFilterCountries = (event) => {
         console.log(`Searching for country ${event.target.value}`);
         setSearchInput(event.target.value);
