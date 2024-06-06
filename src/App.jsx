@@ -3,11 +3,11 @@ import country from "./services/fetchCountries.js"
 import SearchBar from "./components/SearchBar.jsx";
 import CountryList from "./components/CountryList.jsx";
 import CountryDetails from "./components/CountryDetails.jsx";
+import CountryContent from "./context/CountryContent.jsx";
 
 const App = () => {
     const [allCountries, setAllCountries] = useState([]);
     const [filteredCountries, setFilteredCountries] = useState([]);
-    const [searchInput, setSearchInput] = useState('');
 
     const hook = () => {
         country
@@ -18,20 +18,26 @@ const App = () => {
             })
             .catch(error => console.log(error));
     }
-
     useEffect(hook, []);
+
+    const handleFilterCountries = (searchValue) => {
+        console.log(`Searching for country ${searchValue}`);
+        const filteredCountries = allCountries.filter(name => {
+            return name.trim().toLowerCase().includes(searchValue.toLowerCase());
+        });
+        setFilteredCountries(filteredCountries)
+    }
+
     return (
         <div>
-            <SearchBar setSearchInput={setSearchInput} allCountries={allCountries} searchInput={searchInput}
-                       setFilteredCountries={setFilteredCountries}/>
+            <SearchBar onSearch={handleFilterCountries}/>
             {
                 filteredCountries.length === 1 ? (
                     <CountryDetails name={filteredCountries[0]}/>
                 ) : filteredCountries.length <= 10 ? (
-                    <CountryList filteredCountries={filteredCountries} setFilteredCountries={setFilteredCountries}/>
+                    <CountryList filteredCountries={filteredCountries} />
                 ) : (<p>Please make your query more specific.</p>)
             }
-
         </div>
     )
 

@@ -1,17 +1,12 @@
-const SearchBar = ({allCountries, setSearchInput, setFilteredCountries}) => {
-    const handleFilterCountries = (event) => {
-        console.log(`Searching for country ${event.target.value}`);
-        setSearchInput(event.target.value);
-        const filteredCountries = allCountries.filter(name => {
-            return name.trim().toLowerCase().includes(event.target.value.toLowerCase());
-        });
-        setFilteredCountries(filteredCountries)
+const SearchBar = ({onSearch}) => {
+    const handleInputChange = (event) => {
+        onSearch(event.target.value);
     }
-
-    return (
+     return (
         <div>
-            <h1> Find countries: </h1> <input onChange={handleFilterCountries}></input>
+            <h1> Find countries: </h1> <input onChange={handleInputChange}></input>
         </div>
     )
 }
+
 export default SearchBar;
