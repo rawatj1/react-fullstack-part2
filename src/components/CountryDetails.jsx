@@ -1,5 +1,6 @@
 import fetchCountries from "../services/fetchCountries.js";
 import {useEffect, useState} from "react";
+import WeatherDetails from "./WeatherDetails.jsx";
 
 const CountryDetails = ({name}) => {
     const [country, setCountry] = useState(null);
@@ -35,7 +36,7 @@ const CountryDetails = ({name}) => {
                 {country.languages.map(language => (<li key={language}>{language}</li>))}
             </ul>
             <img src={country.flag} alt="flags"/>
-
+            <WeatherDetails country={country}/>
         </div>
     )
 }

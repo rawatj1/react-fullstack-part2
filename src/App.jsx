@@ -3,7 +3,7 @@ import country from "./services/fetchCountries.js"
 import SearchBar from "./components/SearchBar.jsx";
 import CountryList from "./components/CountryList.jsx";
 import CountryDetails from "./components/CountryDetails.jsx";
-import CountryContent from "./context/CountryContent.jsx";
+
 
 const App = () => {
     const [allCountries, setAllCountries] = useState([]);
@@ -20,7 +20,7 @@ const App = () => {
     }
     useEffect(hook, []);
 
-    const handleFilterCountries = (searchValue) => {
+        const handleFilterCountries = (searchValue) => {
         console.log(`Searching for country ${searchValue}`);
         const filteredCountries = allCountries.filter(name => {
             return name.trim().toLowerCase().includes(searchValue.toLowerCase());
@@ -38,6 +38,7 @@ const App = () => {
                     <CountryList filteredCountries={filteredCountries} />
                 ) : (<p>Please make your query more specific.</p>)
             }
+
         </div>
     )
 
